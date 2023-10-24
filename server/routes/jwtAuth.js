@@ -39,7 +39,7 @@ router.post("/register", validInfo, async (req, res) => {
     // Generate JWT token
     const token = jwtGenerator(newUser._id);
 
-    res.json({ token });
+    res.json({ token, message: "User registered successfully!" });
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");

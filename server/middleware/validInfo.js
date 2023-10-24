@@ -7,15 +7,15 @@ module.exports = function (req, res, next) {
 
   if (req.path === "/register") {
     if (![email, username, password, rePassword].every(Boolean)) {
-      return res.status(401).json("Missing Credentials");
+      return res.status(401).json({ message: "Missing Credentials" });
     } else if (!validEmail(email)) {
-      return res.status(401).json("Invalid Email");
+      return res.status(401).json({ message: "Invalid Email" });
     } else if (password !== rePassword) {
-      return res.status(401).json("Passwords Do Not Match");
+      return res.status(401).json({ message: "Passwords Do Not Match" });
     }
   } else if (req.path === "/login") {
     if (![username, password].every(Boolean)) {
-      return res.status(401).json("Missing Credentials");
+      return res.status(401).json({ message: "Missing Credentials" });
     }
   }
 
