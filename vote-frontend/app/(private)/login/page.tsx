@@ -5,17 +5,20 @@ import Link from "next/link";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { useCookies } from "react-cookie";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { InputField } from "@/components";
 
 export default function Login() {
   const router = useRouter();
   const [_cookies, setCookie] = useCookies();
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-    const data = {
-      username: e.target[0].value,
-      password: e.target[1].value,
-    };
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<any>({ shouldUseNativeValidation: true });
 
+  const onSubmit: SubmitHandler<any> = (data: any) => {
     axios
       .post("http://localhost:4001/auth/login", data)
       .then((res: any) => {
@@ -29,16 +32,27 @@ export default function Login() {
   };
   return (
     <div className="absolute translate-x-[-50%] translate-y-[-50%] left-[50%] top-[50%]">
-      <form onSubmit={handleSubmit} className="flex flex-col w-[300px]">
-        <label>User Name</label>
-        <input
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex flex-col w-[300px]"
+      >
+        <InputField
+          required={true}
           name="username"
-          className="border-2 border-gray-500 rounded-md px-2 py-1"
+          label="Username"
+          register={register}
+          errors={errors?.username}
+          placeholder="Enter username"
+          errorMessage="Username is required"
         />
-        <label className="mt-3">Password</label>
-        <input
+        <InputField
+          required={true}
           name="password"
-          className="border-2 border-gray-500 rounded-md px-2 py-1"
+          label="Password"
+          register={register}
+          errors={errors?.password}
+          placeholder="Enter password"
+          errorMessage="Passowrd is required"
         />
         <button
           type="submit"
